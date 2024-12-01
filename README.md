@@ -1,3 +1,6 @@
+![Chip Preview](https://res.cloudinary.com/dgngib1qz/image/upload/v1733076505/preview_mpwf4g.png)
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
