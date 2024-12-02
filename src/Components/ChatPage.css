@@ -93,6 +93,8 @@ body {
   margin-left: auto;
   padding: 1rem;
   font-size: 1.2rem;
+  border-radius: .75rem;
+  position: relative;
 }
 
 .ai-message {
@@ -101,6 +103,36 @@ body {
   color: #2c3e50;
   margin-right: auto;
   font-size: 1.2rem;
+  position: relative;
+  margin-bottom: 1.5rem;
+  margin-top: 1rem;
+}
+
+.message-actions {
+  position: absolute;
+  bottom: -30px;
+  left: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+.message-action-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: #718096;
+  transition: color 0.3s ease;
+  padding: 5px;
+  border-radius: 50%;
+}
+
+.message-action-btn:hover {
+  color: #2c3e50;
+  background-color: rgba(0,0,0,0.05);
+}
+
+.message-action-btn svg {
+  display: block;
 }
 
 .input-container {
@@ -202,5 +234,11 @@ body {
 
   .input-container {
     margin-bottom: 0;
+  }
+
+  .messages-container::before{
+    left: 0;
+    right: 0;
+    width: 100%;
   }
 }

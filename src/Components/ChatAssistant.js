@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import OpenAI from "openai";
 import { useAIContext } from "./AIContext";
+import { Volume2, Copy } from "lucide-react";
 import UpArrow from "../assets/uparrow.svg";
 
 function ChatAssistant({ isMenuOpen, setIsMenuOpen }) {
@@ -62,6 +63,41 @@ function ChatAssistant({ isMenuOpen, setIsMenuOpen }) {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  const speakMessage = (text) => {
+    if ('speechSynthesis' in window) {
+      const voices = window.speechSynthesis.getVoices();
+
+      voices.forEach((voice, index) => {
+        console.log(`${index}: ${voice.name} (${voice.lang})`);
+      } );
+      
+      const utterance = new SpeechSynthesisUtterance(text);
+      const maleVoice = voices.find(voice =>
+        (voice.name.toLowerCase().includes('male') ||
+         voice.name.toLowerCase().includes('man')) &&
+        voice.lang.toLowerCase().startsWith('en')
+      );
+
+      if (maleVoice) {
+        utterance.voice = maleVoice;
+      }
+
+      utterance.rate = 1;
+      utterance.pitch = 1;
+      window.speechSynthesis.speak(utterance);
+    } else {
+      alert("Text-to-speech not supported in this browser");
+    }
+  };
+
+  const copyMessage = (text) => {
+    navigator.clipboard.writeText(text).then(() => {
+      alert("Message copied to clipboard");
+    }).catch(err => {
+      console.error('Failed to copy text: ', err);
+    });
+  };
 
   const sendMessage = async () => {
     if (!inputMessage.trim()) return;
@@ -126,17 +162,35 @@ function ChatAssistant({ isMenuOpen, setIsMenuOpen }) {
         {messages.map((msg, index) => (
           <div
             key={index}
-            className={`message ${
+            className={
               msg.isWelcome
                 ? "welcome-message"
                 : msg.role === "user"
                 ? "user-message"
                 : "ai-message"
-            }`}
+            }
           >
             {msg.content}
             {msg.role === "assistant" && isTyping && (
               <span className="typing-cursor">|</span>
+            )}
+            {msg.role === "assistant" && !msg.isWelcome && (
+              <div className="message-actions">
+                <button
+                  onClick={() => speakMessage(msg.content)}
+                  className="message-action-btn"
+                  title="Speak message"
+                >
+                  <Volume2 size={20} />
+                </button>
+                <button
+                  onClick={() => copyMessage(msg.content)}
+                  className="message-action-btn"
+                  title="Copy message"
+                >
+                  <Copy size={20} />
+                </button>
+              </div>
             )}
           </div>
         ))}
