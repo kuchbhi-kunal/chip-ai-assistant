@@ -273,7 +273,7 @@ body {
 
   .uppercards {
     flex-direction: column;
-    margin-top: 0rem;
+    margin-top: 10%;
     gap: 0;
   }
 
